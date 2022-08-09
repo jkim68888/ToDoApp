@@ -17,6 +17,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         addViews()
         setUI()
+        bottomView.parentVC = self
     }
     
     private func addViews() {
@@ -40,8 +41,6 @@ class HomeViewController: UIViewController {
         }
         
         self.view.backgroundColor = .white
-//        noTasksView.backgroundColor = .cyan
-//        bottomView.backgroundColor = .systemPink
     }
 
 }

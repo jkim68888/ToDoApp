@@ -9,7 +9,9 @@ import UIKit
 import SnapKit
 
 class HomeViewController: UIViewController {
-    let headerView = HeaderView()
+    private let headerView = HeaderView()
+    private let noTasksView = NoTasksView()
+    private let bottomView = BottomView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,17 +19,29 @@ class HomeViewController: UIViewController {
         setUI()
     }
     
-    func addViews() {
-        self.view.addSubViews([headerView])
+    private func addViews() {
+        self.view.addSubViews([headerView, noTasksView, bottomView])
     }
 
-    func setUI() {
+    private func setUI() {
         headerView.snp.makeConstraints { (make) in
             make.leading.trailing.top.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(80)
         }
         
+        noTasksView.snp.makeConstraints{ (make) in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(headerView.snp.bottom)
+        }
+        
+        bottomView.snp.makeConstraints{ (make) in
+            make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(noTasksView.snp.bottom)
+        }
+        
         self.view.backgroundColor = .white
+//        noTasksView.backgroundColor = .cyan
+//        bottomView.backgroundColor = .systemPink
     }
 
 }

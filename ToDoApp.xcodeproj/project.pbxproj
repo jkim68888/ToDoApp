@@ -15,6 +15,8 @@
 		9A724BB128A153340079A675 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BB028A153340079A675 /* HeaderView.swift */; };
 		9A724BB328A153B60079A675 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BB228A153B60079A675 /* UIViewExtension.swift */; };
 		9A724BB528A153C40079A675 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BB428A153C40079A675 /* UIColorExtension.swift */; };
+		9A724BB828A15A160079A675 /* NoTasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BB728A15A160079A675 /* NoTasksView.swift */; };
+		9A724BBA28A15BEF0079A675 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BB928A15BEF0079A675 /* BottomView.swift */; };
 		BB54177BE3C387EE33A979DB /* Pods_ToDoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1404399B2285E638CBBC1456 /* Pods_ToDoApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +32,8 @@
 		9A724BB028A153340079A675 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		9A724BB228A153B60079A675 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		9A724BB428A153C40079A675 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		9A724BB728A15A160079A675 /* NoTasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoTasksView.swift; sourceTree = "<group>"; };
+		9A724BB928A15BEF0079A675 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
 		9B9E889EB26DAF4C2D3C110A /* Pods-ToDoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoApp.release.xcconfig"; path = "Target Support Files/Pods-ToDoApp/Pods-ToDoApp.release.xcconfig"; sourceTree = "<group>"; };
 		EC12895798C673FA9484573D /* Pods-ToDoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoApp.debug.xcconfig"; path = "Target Support Files/Pods-ToDoApp/Pods-ToDoApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -155,7 +159,6 @@
 		9A724BA728A1506A0079A675 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				9A724BB628A155900079A675 /* NoTasks */,
 				9A724BAC28A152040079A675 /* Add */,
 				9A724BA928A150C00079A675 /* Bottom */,
 				9A724BA828A150720079A675 /* Header */,
@@ -174,6 +177,7 @@
 		9A724BA928A150C00079A675 /* Bottom */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BB928A15BEF0079A675 /* BottomView.swift */,
 			);
 			path = Bottom;
 			sourceTree = "<group>";
@@ -181,6 +185,7 @@
 		9A724BAA28A151640079A675 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BBB28A237580079A675 /* View */,
 				9A724BA128A14F470079A675 /* ViewModel */,
 				9A724BA028A14F260079A675 /* Cell */,
 				9A724BA528A14F680079A675 /* ViewController */,
@@ -229,8 +234,17 @@
 		9A724BB628A155900079A675 /* NoTasks */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BB728A15A160079A675 /* NoTasksView.swift */,
 			);
 			path = NoTasks;
+			sourceTree = "<group>";
+		};
+		9A724BBB28A237580079A675 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9A724BB628A155900079A675 /* NoTasks */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -348,7 +362,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A724BB328A153B60079A675 /* UIViewExtension.swift in Sources */,
+				9A724BB828A15A160079A675 /* NoTasksView.swift in Sources */,
 				9A724B9128A13F860079A675 /* HomeViewController.swift in Sources */,
+				9A724BBA28A15BEF0079A675 /* BottomView.swift in Sources */,
 				9A724B8D28A13F860079A675 /* AppDelegate.swift in Sources */,
 				9A724B8F28A13F860079A675 /* SceneDelegate.swift in Sources */,
 				9A724BB128A153340079A675 /* HeaderView.swift in Sources */,

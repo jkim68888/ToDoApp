@@ -24,11 +24,11 @@ class HeaderView: UIView {
         setUI()
     }
     
-    func addViews() {
+    private func addViews() {
         self.addSubViews([logo, editBtn])
     }
 
-    func setUI() {
+    private func setUI() {
         logo.snp.makeConstraints { (make) in
             make.leading.equalToSuperview().offset(15)
             make.centerY.equalToSuperview()

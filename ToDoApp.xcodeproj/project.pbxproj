@@ -17,6 +17,8 @@
 		9A724BB528A153C40079A675 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BB428A153C40079A675 /* UIColorExtension.swift */; };
 		9A724BB828A15A160079A675 /* NoTasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BB728A15A160079A675 /* NoTasksView.swift */; };
 		9A724BBA28A15BEF0079A675 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BB928A15BEF0079A675 /* BottomView.swift */; };
+		9A724BBD28A238DF0079A675 /* TasksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BBC28A238DF0079A675 /* TasksModel.swift */; };
+		9A724BC128A23AE60079A675 /* TasksRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BC028A23AE60079A675 /* TasksRepository.swift */; };
 		BB54177BE3C387EE33A979DB /* Pods_ToDoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1404399B2285E638CBBC1456 /* Pods_ToDoApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +36,8 @@
 		9A724BB428A153C40079A675 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		9A724BB728A15A160079A675 /* NoTasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoTasksView.swift; sourceTree = "<group>"; };
 		9A724BB928A15BEF0079A675 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
+		9A724BBC28A238DF0079A675 /* TasksModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksModel.swift; sourceTree = "<group>"; };
+		9A724BC028A23AE60079A675 /* TasksRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksRepository.swift; sourceTree = "<group>"; };
 		9B9E889EB26DAF4C2D3C110A /* Pods-ToDoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoApp.release.xcconfig"; path = "Target Support Files/Pods-ToDoApp/Pods-ToDoApp.release.xcconfig"; sourceTree = "<group>"; };
 		EC12895798C673FA9484573D /* Pods-ToDoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoApp.debug.xcconfig"; path = "Target Support Files/Pods-ToDoApp/Pods-ToDoApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,6 +122,7 @@
 		9A724BA228A14F4E0079A675 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BBC28A238DF0079A675 /* TasksModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -125,6 +130,7 @@
 		9A724BA328A14F550079A675 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BBE28A23AAB0079A675 /* Repository */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -149,6 +155,7 @@
 		9A724BA628A1505B0079A675 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BAC28A152040079A675 /* Add */,
 				9A724BAB28A151960079A675 /* Edit */,
 				9A724BAA28A151640079A675 /* Home */,
 				9A724BA728A1506A0079A675 /* Common */,
@@ -159,7 +166,6 @@
 		9A724BA728A1506A0079A675 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				9A724BAC28A152040079A675 /* Add */,
 				9A724BA928A150C00079A675 /* Bottom */,
 				9A724BA828A150720079A675 /* Header */,
 			);
@@ -206,6 +212,8 @@
 		9A724BAC28A152040079A675 /* Add */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BC328A242690079A675 /* ViewModel */,
+				9A724BC228A2425E0079A675 /* ViewController */,
 			);
 			path = Add;
 			sourceTree = "<group>";
@@ -245,6 +253,28 @@
 				9A724BB628A155900079A675 /* NoTasks */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		9A724BBE28A23AAB0079A675 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				9A724BC028A23AE60079A675 /* TasksRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		9A724BC228A2425E0079A675 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		9A724BC328A242690079A675 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -369,6 +399,8 @@
 				9A724B8F28A13F860079A675 /* SceneDelegate.swift in Sources */,
 				9A724BB128A153340079A675 /* HeaderView.swift in Sources */,
 				9A724BB528A153C40079A675 /* UIColorExtension.swift in Sources */,
+				9A724BC128A23AE60079A675 /* TasksRepository.swift in Sources */,
+				9A724BBD28A238DF0079A675 /* TasksModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

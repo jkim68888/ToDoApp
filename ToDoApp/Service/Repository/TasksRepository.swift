@@ -12,12 +12,16 @@ import RxCocoa
 protocol TasksRepositoryProtocol {
     var tasks: [TasksData] { get }
     
+    var tasksSubject: PublishSubject<[TasksData]> { get }
+    
     func addTask(task: TasksData) -> Observable<[TasksData]>
     func deleteTask(task: TasksData) -> Observable<[TasksData]>
     func deleteAll() -> Observable<[TasksData]>
 }
 
 class TasksRepository: TasksRepositoryProtocol {
+    let tasksSubject = PublishSubject<[TasksData]>.init()
+    
     // singletone
     // 여기서 한번만 생성시키고, 다른곳에서는 shared 로 호출하여 사용
     static let sahred = TasksRepository()
@@ -27,6 +31,7 @@ class TasksRepository: TasksRepositoryProtocol {
     func addTask(task: TasksData) -> Observable<[TasksData]> {
         return Observable<[TasksData]>.create { observer -> Disposable in
             self.tasks.append(task)
+            self.tasksSubject.onNext(self.tasks)
             observer.onNext(self.tasks)
             
             return Disposables.create()
@@ -36,6 +41,7 @@ class TasksRepository: TasksRepositoryProtocol {
     func deleteTask(task: TasksData) -> Observable<[TasksData]> {
         return Observable<[TasksData]>.create { observer -> Disposable in
             self.tasks = self.tasks.filter { $0.id != task.id }
+            self.tasksSubject.onNext(self.tasks)
             observer.onNext(self.tasks)
             
             return Disposables.create()
@@ -45,6 +51,7 @@ class TasksRepository: TasksRepositoryProtocol {
     func deleteAll() -> Observable<[TasksData]> {
         return Observable<[TasksData]>.create { observer -> Disposable in
             self.tasks.removeAll()
+            self.tasksSubject.onNext(self.tasks)
             observer.onNext(self.tasks)
             
             return Disposables.create()

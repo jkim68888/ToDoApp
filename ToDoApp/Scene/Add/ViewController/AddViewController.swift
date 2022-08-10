@@ -9,9 +9,16 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Toast_Swift
 
 class AddViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    
+    let viewModel = AddViewModel()
+    lazy var input = AddViewModel.Input(addTask: .init())
+    lazy var output = viewModel.transform(input: input)
+    
+    var taskPriority: TasksPriority = .none
     
     private let addViewContainer = UIView()
     private let topContainer = UIView()
@@ -167,45 +174,79 @@ class AddViewController: UIViewController {
     private func bindRx() {
         closeBtn.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { _ in
-                self.dismiss(animated: false)
+            .subscribe(onNext: { (vc, _) in
+                vc.dismiss(animated: false)
             })
             .disposed(by: disposeBag)
         
         highPriorityBtn.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { _ in
-                self.highPriorityBtn.backgroundColor = UIColor(hexString: "#D82525")
-                self.normalPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
-                self.lowPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
-                self.highPriorityBtn.setTitleColor(.white, for: .normal)
-                self.normalPriorityBtn.setTitleColor(.black, for: .normal)
-                self.lowPriorityBtn.setTitleColor(.black, for: .normal)
+            .subscribe(onNext: { (vc, _) in
+                vc.highPriorityBtn.backgroundColor = UIColor(hexString: "#D82525")
+                vc.normalPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
+                vc.lowPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
+                vc.highPriorityBtn.setTitleColor(.white, for: .normal)
+                vc.normalPriorityBtn.setTitleColor(.black, for: .normal)
+                vc.lowPriorityBtn.setTitleColor(.black, for: .normal)
+                vc.taskPriority = .high
             })
             .disposed(by: disposeBag)
         
         normalPriorityBtn.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { _ in
-                self.highPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
-                self.normalPriorityBtn.backgroundColor = UIColor(hexString: "#FFC700")
-                self.lowPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
-                self.highPriorityBtn.setTitleColor(.black, for: .normal)
-                self.normalPriorityBtn.setTitleColor(.white, for: .normal)
-                self.lowPriorityBtn.setTitleColor(.black, for: .normal)
+            .subscribe(onNext: { (vc, _) in
+                vc.highPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
+                vc.normalPriorityBtn.backgroundColor = UIColor(hexString: "#FFC700")
+                vc.lowPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
+                vc.highPriorityBtn.setTitleColor(.black, for: .normal)
+                vc.normalPriorityBtn.setTitleColor(.white, for: .normal)
+                vc.lowPriorityBtn.setTitleColor(.black, for: .normal)
+                vc.taskPriority = .normal
             })
             .disposed(by: disposeBag)
         
         lowPriorityBtn.rx.tap
             .withUnretained(self)
-            .subscribe(onNext: { _ in
-                self.highPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
-                self.normalPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
-                self.lowPriorityBtn.backgroundColor = UIColor(hexString: "#249209")
-                self.highPriorityBtn.setTitleColor(.black, for: .normal)
-                self.normalPriorityBtn.setTitleColor(.black, for: .normal)
-                self.lowPriorityBtn.setTitleColor(.white, for: .normal)
+            .subscribe(onNext: { (vc, _) in
+                vc.highPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
+                vc.normalPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
+                vc.lowPriorityBtn.backgroundColor = UIColor(hexString: "#249209")
+                vc.highPriorityBtn.setTitleColor(.black, for: .normal)
+                vc.normalPriorityBtn.setTitleColor(.black, for: .normal)
+                vc.lowPriorityBtn.setTitleColor(.white, for: .normal)
+                vc.taskPriority = .low
             })
             .disposed(by: disposeBag)
+        
+        saveBtn.rx.tap
+            .withUnretained(self)
+            .map{ (vc, _) -> TasksData in
+                return TasksData.init(id: UUID().uuidString, isComplete: false, task: vc.addTaskTextField.text ?? "", priority: vc.taskPriority)
+            }
+            .bind(to: input.addTask)
+            .disposed(by: disposeBag)
+        
+        output.tasks
+            .withUnretained(self)
+            .subscribe(onNext: { (vc, data) in
+                vc.dismiss(animated: false)
+            })
+            .disposed(by: disposeBag)
+        
+        output.validationError
+            .withUnretained(self)
+            .subscribe(onNext: { (vc, msg) in
+                vc.view.makeToast(msg)
+            })
+            .disposed(by: disposeBag)
+        
+        addTaskTextField.rx.controlEvent(.editingDidEndOnExit)
+            .asObservable()
+            .withUnretained(self)
+            .subscribe(onNext: { (vc, _) in
+                vc.view.endEditing(true)
+            })
+            .disposed(by: disposeBag)
+        
     }
 }

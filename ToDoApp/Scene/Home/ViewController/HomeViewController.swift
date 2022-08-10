@@ -7,22 +7,35 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxDataSources
 
 class HomeViewController: UIViewController {
+    private let disposeBag = DisposeBag()
+    
+    let viewModel = HomeViewModel()
+    lazy var input = HomeViewModel.Input()
+    lazy var output = viewModel.transform(input: input)
+    
     private let headerView = HeaderView()
     private let noTasksView = NoTasksView()
     private let bottomView = BottomView()
+    
+    private let tasksTableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
         addViews()
         setUI()
+        bindRx()
         bottomView.parentVC = self
     }
     
     private func addViews() {
-        self.view.addSubViews([headerView, noTasksView, bottomView])
+        self.view.addSubViews([headerView, noTasksView, tasksTableView, bottomView])
+        
+        self.tasksTableView.register(TasksTableViewCell.self, forCellReuseIdentifier: TasksTableViewCell.identifier)
     }
 
     private func setUI() {
@@ -41,8 +54,44 @@ class HomeViewController: UIViewController {
             make.top.equalTo(noTasksView.snp.bottom)
         }
         
+        tasksTableView.snp.makeConstraints{ (make) in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(headerView.snp.bottom)
+        }
+        
         self.view.backgroundColor = .white
+        tasksTableView.isHidden = true
     }
+    
+    private func bindRx() {
+        output.tasks
+            .withUnretained(self)
+            .map{ (vc, data) in
+                vc.tasksTableView.isHidden = data.count == 0
+                vc.noTasksView.isHidden = data.count != 0
+                vc.headerView.editBtn.isHidden = data.count == 0
+                
+                return data
+            }
+            .bind(to: tasksTableView.rx.items(dataSource: tasksDatasources))
+            .disposed(by: disposeBag)
+    }
+}
+
+typealias TasksDatasources = RxTableViewSectionedAnimatedDataSource<TasksSection>
+
+extension HomeViewController: UITableViewDelegate {
+    private var tasksDatasources: TasksDatasources {
+          let datasource = TasksDatasources.init(decideViewTransition: { _, tableView, changeset in
+              return .animated
+            },configureCell: {[weak self] _, tableView, indexPath, item -> UITableViewCell in
+                guard let self = self else { return UITableViewCell()}
+                let cell: TasksTableViewCell = tableView.dequeueReusableCell(withIdentifier: TasksTableViewCell.identifier, for: indexPath) as! TasksTableViewCell
+                cell.onData.onNext(item)
+                return cell
+            })
+          return datasource
+        }
 
 }
 

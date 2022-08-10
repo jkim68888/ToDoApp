@@ -22,6 +22,9 @@
 		9A724BC528A243040079A675 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BC428A243040079A675 /* AddViewController.swift */; };
 		9A724BC728A259B10079A675 /* AddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BC628A259B10079A675 /* AddViewModel.swift */; };
 		9A724BC928A25D420079A675 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BC828A25D420079A675 /* ViewModelType.swift */; };
+		9A724BCB28A36A550079A675 /* TasksTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BCA28A36A550079A675 /* TasksTableViewCell.swift */; };
+		9A724BCD28A3E3DC0079A675 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BCC28A3E3DC0079A675 /* HomeViewModel.swift */; };
+		9A724BCF28A3FFD10079A675 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A724BCE28A3FFD10079A675 /* EditViewController.swift */; };
 		BB54177BE3C387EE33A979DB /* Pods_ToDoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1404399B2285E638CBBC1456 /* Pods_ToDoApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +47,9 @@
 		9A724BC428A243040079A675 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		9A724BC628A259B10079A675 /* AddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModel.swift; sourceTree = "<group>"; };
 		9A724BC828A25D420079A675 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
+		9A724BCA28A36A550079A675 /* TasksTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksTableViewCell.swift; sourceTree = "<group>"; };
+		9A724BCC28A3E3DC0079A675 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		9A724BCE28A3FFD10079A675 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		9B9E889EB26DAF4C2D3C110A /* Pods-ToDoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoApp.release.xcconfig"; path = "Target Support Files/Pods-ToDoApp/Pods-ToDoApp.release.xcconfig"; sourceTree = "<group>"; };
 		EC12895798C673FA9484573D /* Pods-ToDoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoApp.debug.xcconfig"; path = "Target Support Files/Pods-ToDoApp/Pods-ToDoApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,6 +120,7 @@
 		9A724BA028A14F260079A675 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BCA28A36A550079A675 /* TasksTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -121,6 +128,7 @@
 		9A724BA128A14F470079A675 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BCC28A3E3DC0079A675 /* HomeViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -228,6 +236,7 @@
 		9A724BAD28A152270079A675 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				9A724BCE28A3FFD10079A675 /* EditViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -406,12 +415,15 @@
 				9A724BC528A243040079A675 /* AddViewController.swift in Sources */,
 				9A724BBA28A15BEF0079A675 /* BottomView.swift in Sources */,
 				9A724B8D28A13F860079A675 /* AppDelegate.swift in Sources */,
+				9A724BCB28A36A550079A675 /* TasksTableViewCell.swift in Sources */,
 				9A724BC728A259B10079A675 /* AddViewModel.swift in Sources */,
+				9A724BCF28A3FFD10079A675 /* EditViewController.swift in Sources */,
 				9A724B8F28A13F860079A675 /* SceneDelegate.swift in Sources */,
 				9A724BB128A153340079A675 /* HeaderView.swift in Sources */,
 				9A724BB528A153C40079A675 /* UIColorExtension.swift in Sources */,
 				9A724BC128A23AE60079A675 /* TasksRepository.swift in Sources */,
 				9A724BBD28A238DF0079A675 /* TasksModel.swift in Sources */,
+				9A724BCD28A3E3DC0079A675 /* HomeViewModel.swift in Sources */,
 				9A724BC928A25D420079A675 /* ViewModelType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

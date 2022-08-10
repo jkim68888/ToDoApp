@@ -14,6 +14,7 @@ class BottomView: UIView {
     private let disposeBag = DisposeBag()
     
     private let addBtn = UIButton()
+    
     var parentVC: HomeViewController?
 
     override init(frame: CGRect) {

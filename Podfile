@@ -9,4 +9,7 @@ target 'ToDoApp' do
   pod 'SnapKit', '~> 5.6.0'
   pod 'RxSwift'
   pod 'RxCocoa'
+  pod 'RxDataSources', '~> 5.0'
+  pod 'Toast-Swift', '~> 5.0.1'
+  pod 'IQKeyboardManagerSwift', '~> 6.5.0'
 end

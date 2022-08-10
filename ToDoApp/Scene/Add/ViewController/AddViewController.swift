@@ -106,7 +106,7 @@ class AddViewController: UIViewController {
         }
         
         saveBtn.snp.makeConstraints{ (make) in
-            make.top.equalTo(priorityBtnContainer.snp.bottom).offset(25)
+            make.top.equalTo(priorityBtnContainer.snp.bottom).offset(30)
             make.leading.equalToSuperview().offset(15)
             make.trailing.equalToSuperview().offset(-15)
             make.height.equalTo(50)
@@ -123,6 +123,7 @@ class AddViewController: UIViewController {
         
         addTaskTextField.backgroundColor = UIColor(hexString: "#EBEBEB")
         addTaskTextField.layer.cornerRadius = 5
+        addTaskTextField.placeholder = "할일을 작성해주세요."
         
         priorityLabel.text = "중요도"
         priorityLabel.font = UIFont.boldSystemFont(ofSize: 22)
@@ -177,6 +178,9 @@ class AddViewController: UIViewController {
                 self.highPriorityBtn.backgroundColor = UIColor(hexString: "#D82525")
                 self.normalPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
                 self.lowPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
+                self.highPriorityBtn.setTitleColor(.white, for: .normal)
+                self.normalPriorityBtn.setTitleColor(.black, for: .normal)
+                self.lowPriorityBtn.setTitleColor(.black, for: .normal)
             })
             .disposed(by: disposeBag)
         
@@ -186,6 +190,9 @@ class AddViewController: UIViewController {
                 self.highPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
                 self.normalPriorityBtn.backgroundColor = UIColor(hexString: "#FFC700")
                 self.lowPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
+                self.highPriorityBtn.setTitleColor(.black, for: .normal)
+                self.normalPriorityBtn.setTitleColor(.white, for: .normal)
+                self.lowPriorityBtn.setTitleColor(.black, for: .normal)
             })
             .disposed(by: disposeBag)
         
@@ -195,6 +202,9 @@ class AddViewController: UIViewController {
                 self.highPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
                 self.normalPriorityBtn.backgroundColor = UIColor(hexString: "#EBEBEB")
                 self.lowPriorityBtn.backgroundColor = UIColor(hexString: "#249209")
+                self.highPriorityBtn.setTitleColor(.black, for: .normal)
+                self.normalPriorityBtn.setTitleColor(.black, for: .normal)
+                self.lowPriorityBtn.setTitleColor(.white, for: .normal)
             })
             .disposed(by: disposeBag)
     }

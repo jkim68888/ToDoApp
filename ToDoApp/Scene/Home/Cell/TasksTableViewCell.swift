@@ -16,7 +16,11 @@ final class TasksTableViewCell: UITableViewCell {
     var onDataBag = DisposeBag()
     var bag = DisposeBag()
     
+    private var checkbox = UIButton()
     private var taskLabel = UILabel()
+    private var priorityCircle = UIImageView()
+    
+    private var checked: Bool = false
     
     required init?(coder aDecoder: NSCoder) {
       let cellData = PublishSubject<TasksData>()
@@ -37,24 +41,70 @@ final class TasksTableViewCell: UITableViewCell {
         setUI()
 
         cellData
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .withUnretained(self)
             .subscribe(onNext: {(cell, data) in
+                cell.checked = false
                 cell.taskLabel.text = data.task
+                
+                let priorityValue = data.priority
+                
+                if priorityValue == .high {
+                    cell.priorityCircle.image = UIImage(named: "high")
+                } else if priorityValue == .normal {
+                    cell.priorityCircle.image = UIImage(named: "normal")
+                } else if priorityValue == .low {
+                    cell.priorityCircle.image = UIImage(named: "low")
+                }
             })
             .disposed(by: onDataBag)
     }
     
     private func setUI() {
-        self.contentView.addSubViews([taskLabel])
+        self.contentView.addSubViews([checkbox, taskLabel, priorityCircle])
+        
+        contentView.snp.makeConstraints{(make) in
+            make.edges.equalToSuperview()
+            make.height.equalTo(50)
+        }
+        
+        checkbox.snp.makeConstraints{(make) in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(15)
+        }
         
         taskLabel.snp.makeConstraints{(make) in
-            make.edges.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(checkbox.snp.trailing).offset(5)
         }
+        
+        priorityCircle.snp.makeConstraints{(make) in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-15)
+        }
+
+        checkbox.setImage(UIImage(named: "unchecked"), for: .normal)
+
+        priorityCircle.layer.cornerRadius = 100
+        
+        self.selectionStyle = .none
     }
     
     private func bindRx() {
-        
+        checkbox.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (cell, _) in
+                cell.checked = !cell.checked
+                
+                if cell.checked {
+                    cell.checkbox.setImage(UIImage(named: "checked"), for: .normal)
+                    cell.taskLabel.attributedText = cell.taskLabel.text?.strikeThrough()
+                } else {
+                    cell.checkbox.setImage(UIImage(named: "unchecked"), for: .normal)
+                    cell.taskLabel.attributedText = cell.taskLabel.text?.removeStrikeThrough()
+                }
+            })
+            .disposed(by: onDataBag)
     }
 
 }

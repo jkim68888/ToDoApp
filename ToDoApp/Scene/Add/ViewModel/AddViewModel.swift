@@ -10,7 +10,7 @@ import RxSwift
 
 class AddViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
-    private let tasksRepository = TasksRepository.sahred
+    private let tasksRepository = TasksRepository.shared
     
     func transform(input: Input) -> Output {
         let tasks = PublishSubject<[TasksData]>.init()

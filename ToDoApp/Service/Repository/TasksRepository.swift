@@ -15,6 +15,7 @@ protocol TasksRepositoryProtocol {
     var tasksSubject: PublishSubject<[TasksData]> { get }
     
     func addTask(task: TasksData) -> Observable<[TasksData]>
+    func updateTask(task: TasksData) -> Observable<[TasksData]>
     func deleteTask(task: TasksData) -> Observable<[TasksData]>
     func deleteAll() -> Observable<[TasksData]>
 }
@@ -24,7 +25,7 @@ class TasksRepository: TasksRepositoryProtocol {
     
     // singletone
     // 여기서 한번만 생성시키고, 다른곳에서는 shared 로 호출하여 사용
-    static let sahred = TasksRepository()
+    static let shared = TasksRepository()
     
     var tasks: [TasksData] = []
     
@@ -32,6 +33,19 @@ class TasksRepository: TasksRepositoryProtocol {
         return Observable<[TasksData]>.create { observer -> Disposable in
             self.tasks.append(task)
             self.tasksSubject.onNext(self.tasks)
+            observer.onNext(self.tasks)
+            
+            return Disposables.create()
+        }
+    }
+    
+    func updateTask(task: TasksData) -> Observable<[TasksData]> {
+        return Observable<[TasksData]>.create { observer -> Disposable in
+            guard let updateTaskIndex = self.tasks.firstIndex(where: { $0.id == task.id }) else {
+                return Disposables.create()
+            }
+            
+            self.tasks[updateTaskIndex].isComplete = task.isComplete
             observer.onNext(self.tasks)
             
             return Disposables.create()

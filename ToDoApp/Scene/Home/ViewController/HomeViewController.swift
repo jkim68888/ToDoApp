@@ -14,7 +14,7 @@ class HomeViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     let viewModel = HomeViewModel()
-    lazy var input = HomeViewModel.Input()
+    lazy var input = HomeViewModel.Input(updateTask: .init())
     lazy var output = viewModel.transform(input: input)
     
     private let headerView = HeaderView()
@@ -64,14 +64,14 @@ class HomeViewController: UIViewController {
     }
     
     private func bindRx() {
-        output.tasks
+        output.sectionsSubject
             .withUnretained(self)
-            .map{ (vc, data) in
-                vc.tasksTableView.isHidden = data.count == 0
-                vc.noTasksView.isHidden = data.count != 0
-                vc.headerView.editBtn.isHidden = data.count == 0
+            .map{ (vc, sections) in
+                vc.tasksTableView.isHidden = sections.count == 0
+                vc.noTasksView.isHidden = sections.count != 0
+                vc.headerView.editBtn.isHidden = sections.count == 0
                 
-                return data
+                return sections
             }
             .bind(to: tasksTableView.rx.items(dataSource: tasksDatasources))
             .disposed(by: disposeBag)
@@ -83,7 +83,7 @@ typealias TasksDatasources = RxTableViewSectionedAnimatedDataSource<TasksSection
 extension HomeViewController: UITableViewDelegate {
     private var tasksDatasources: TasksDatasources {
           let datasource = TasksDatasources.init(decideViewTransition: { _, tableView, changeset in
-              return .animated
+              return .reload
             },configureCell: {[weak self] _, tableView, indexPath, item -> UITableViewCell in
                 guard let self = self else { return UITableViewCell()}
                 let cell: TasksTableViewCell = tableView.dequeueReusableCell(withIdentifier: TasksTableViewCell.identifier, for: indexPath) as! TasksTableViewCell

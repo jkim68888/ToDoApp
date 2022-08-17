@@ -20,7 +20,7 @@ final class TasksTableViewCell: UITableViewCell {
     private var taskLabel = UILabel()
     private var priorityCircle = UIImageView()
     
-    private var checked: Bool = false
+    private var taskData: TasksData?
     
     required init?(coder aDecoder: NSCoder) {
       let cellData = PublishSubject<TasksData>()
@@ -29,8 +29,9 @@ final class TasksTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-      super.prepareForReuse()
-      bag = DisposeBag()
+        super.prepareForReuse()
+        bag = DisposeBag()
+        self.taskLabel.attributedText = self.taskLabel.text?.removeStrikeThrough()
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -43,11 +44,13 @@ final class TasksTableViewCell: UITableViewCell {
         cellData
             .observe(on: MainScheduler.instance)
             .withUnretained(self)
-            .subscribe(onNext: {(cell, data) in
-                cell.checked = false
-                cell.taskLabel.text = data.task
+            .subscribe(onNext: {(cell, taskData) in
+                cell.taskData = taskData
                 
-                let priorityValue = data.priority
+                let priorityValue = taskData.priority
+                let isChecked = taskData.isComplete
+                
+                cell.taskLabel.text = taskData.task
                 
                 if priorityValue == .high {
                     cell.priorityCircle.image = UIImage(named: "high")
@@ -55,6 +58,14 @@ final class TasksTableViewCell: UITableViewCell {
                     cell.priorityCircle.image = UIImage(named: "normal")
                 } else if priorityValue == .low {
                     cell.priorityCircle.image = UIImage(named: "low")
+                }
+                
+                if isChecked {
+                    cell.checkbox.setImage(UIImage(named: "checked"), for: .normal)
+                    cell.taskLabel.attributedText = cell.taskLabel.text?.strikeThrough()
+                } else {
+                    cell.checkbox.setImage(UIImage(named: "unchecked"), for: .normal)
+                    cell.taskLabel.attributedText = cell.taskLabel.text?.removeStrikeThrough()
                 }
             })
             .disposed(by: onDataBag)
@@ -94,15 +105,9 @@ final class TasksTableViewCell: UITableViewCell {
         checkbox.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { (cell, _) in
-                cell.checked = !cell.checked
-                
-                if cell.checked {
-                    cell.checkbox.setImage(UIImage(named: "checked"), for: .normal)
-                    cell.taskLabel.attributedText = cell.taskLabel.text?.strikeThrough()
-                } else {
-                    cell.checkbox.setImage(UIImage(named: "unchecked"), for: .normal)
-                    cell.taskLabel.attributedText = cell.taskLabel.text?.removeStrikeThrough()
-                }
+                guard let vc = cell.parentContainerViewController() as? HomeViewController else { return }
+                guard let taskData = cell.taskData else { return }
+                vc.input.updateTask.onNext(taskData)
             })
             .disposed(by: onDataBag)
     }

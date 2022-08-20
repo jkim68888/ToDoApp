@@ -12,4 +12,5 @@ target 'ToDoApp' do
   pod 'RxDataSources', '~> 5.0'
   pod 'Toast-Swift', '~> 5.0.1'
   pod 'IQKeyboardManagerSwift', '~> 6.5.0'
+  pod 'RealmSwift', '~>10'
 end

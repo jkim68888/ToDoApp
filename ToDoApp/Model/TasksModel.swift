@@ -8,22 +8,60 @@
 import Foundation
 import RxDataSources
 import RxSwift
+import RealmSwift
 
-struct TasksData: Codable {
-    var id: String
-    var isComplete: Bool
-    var task: String
-    var priority: TasksPriority
+//class Person: Object {
+//    private var _day: WeekDay?
+//    var birthday: WeekDay? {
+//        get {
+//            if let resolTypeRaw = birthdayRaw  {
+//                _day = WeekDay(rawValue: resolTypeRaw)
+//                return _day
+//            }
+//            return .Sunday
+//        }
+//        set {
+//            birthdayRaw = newValue?.rawValue
+//            _day = newValue
+//        }
+//    }
+//
+//    dynamic var id: String? = nil
+//
+//
+//    override static func primaryKey() -> String? {
+//        return "id"
+//    }
+//}
+
+class TasksData: Object {
+    @objc dynamic var id: String = ""
+    @objc dynamic var isComplete: Bool = false
+    @objc dynamic var task: String = ""
+    @objc dynamic var priorityRaw: String? = nil
     
-    enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case isComplete = "isComplete"
-        case task = "task"
-        case priority = "priority"
+    var priority: TasksPriority? {
+        get {
+            if let resolTypeRaw = priorityRaw  {
+                return TasksPriority(rawValue: resolTypeRaw)
+            }
+            return .none
+        }
+        set {
+            priorityRaw = newValue?.rawValue
+        }
+    }
+    
+    convenience init(id: String, isComplete: Bool, task: String, priority: TasksPriority) {
+        self.init()
+        self.id = id
+        self.isComplete = isComplete
+        self.task = task
+        self.priority = TasksPriority.init(rawValue: priority.rawValue)!
     }
 }
 
-enum TasksPriority: Codable {
+enum TasksPriority: String {
     case high
     case normal
     case low
@@ -52,7 +90,7 @@ extension TasksSection: AnimatableSectionModelType {
     }
 }
 
-extension TasksData: IdentifiableType, Equatable {
+extension TasksData: IdentifiableType {
     typealias Identity = String
     
     public var identity: String {

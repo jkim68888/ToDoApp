@@ -14,7 +14,7 @@ class HomeViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     let viewModel = HomeViewModel()
-    lazy var input = HomeViewModel.Input(updateTask: .init())
+    lazy var input = HomeViewModel.Input(updateTask: .init(), initializeTasks: .create(bufferSize: 1))
     lazy var output = viewModel.transform(input: input)
     
     private let headerView = HeaderView()
@@ -64,6 +64,8 @@ class HomeViewController: UIViewController {
     }
     
     private func bindRx() {
+        input.initializeTasks.onNext(.trigger)
+        
         output.sectionsSubject
             .withUnretained(self)
             .map{ (vc, sections) in

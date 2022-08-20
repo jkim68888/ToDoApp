@@ -8,12 +8,14 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import RealmSwift
 
 protocol TasksRepositoryProtocol {
     var tasks: [TasksData] { get }
     
     var tasksSubject: ReplaySubject<[TasksData]> { get }
     
+    func getRealmTasks() -> Observable<[TasksData]>
     func addTask(task: TasksData) -> Observable<[TasksData]>
     func updateTask(task: TasksData) -> Observable<[TasksData]>
     func deleteTask(task: TasksData) -> Observable<[TasksData]>
@@ -21,6 +23,9 @@ protocol TasksRepositoryProtocol {
 }
 
 class TasksRepository: TasksRepositoryProtocol {
+    // Realm 가져오기
+    let realm = try! Realm()
+    
     let tasksSubject = ReplaySubject<[TasksData]>.create(bufferSize: 1)
     
     // singletone
@@ -29,11 +34,28 @@ class TasksRepository: TasksRepositoryProtocol {
     
     var tasks: [TasksData] = []
     
+    func getRealmTasks() -> Observable<[TasksData]> {
+        return Observable<[TasksData]>.create{ observer -> Disposable in
+            let realmSavedTasks = self.realm.objects(TasksData.self)
+            observer.onNext(realmSavedTasks.filter{ _ in true })
+            
+            self.tasks = realmSavedTasks.filter{ _ in true }
+            
+            return Disposables.create()
+        }
+    }
+    
     func addTask(task: TasksData) -> Observable<[TasksData]> {
         return Observable<[TasksData]>.create { observer -> Disposable in
             self.tasks.append(task)
             self.tasksSubject.onNext(self.tasks)
             observer.onNext(self.tasks)
+            
+            try! self.realm.write {
+                self.realm.add(task)
+                
+                print("렐름 프리오리티: ", task.priority)
+            }
             
             return Disposables.create()
         }

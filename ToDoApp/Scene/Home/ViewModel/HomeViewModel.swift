@@ -13,7 +13,29 @@ class HomeViewModel: ViewModelType {
     private let tasksRepository = TasksRepository.shared
     
     func transform(input: Input) -> Output {
-        let sectionsSubject = PublishSubject<[TasksSection]>.init()
+        let sectionsSubject = ReplaySubject<[TasksSection]>.create(bufferSize: 1)
+        
+        input.initializeTasks
+            .withUnretained(self)
+            .flatMap{ (vm, task) -> Observable<[TasksData]> in
+                return vm.tasksRepository.getRealmTasks()
+            }
+            .map { tasks -> [TasksSection] in
+                var section = TasksSection.init(header: "first Section",
+                                                items: [],
+                                                sectionId: UUID().uuidString)
+                tasks.forEach { task in
+                    section.items.append(task)
+                }
+                
+                return [section]
+            }
+            .withUnretained(self)
+            .subscribe(onNext:  { (vm, sections) in
+                sectionsSubject.onNext(sections)
+                print("HomeViewModel : ", sections)
+            })
+            .disposed(by: disposeBag)
         
         tasksRepository.tasksSubject
             .map { tasks -> [TasksSection] in
@@ -64,9 +86,10 @@ class HomeViewModel: ViewModelType {
 extension HomeViewModel {
     struct Input {
         var updateTask: PublishSubject<TasksData>
+        var initializeTasks: ReplaySubject<ViewModelExecution>
     }
     
     struct Output {
-        var sectionsSubject: PublishSubject<[TasksSection]>
+        var sectionsSubject: ReplaySubject<[TasksSection]>
     }
 }

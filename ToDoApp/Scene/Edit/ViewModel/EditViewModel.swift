@@ -80,7 +80,7 @@ class EditViewModel: ViewModelType {
 extension EditViewModel {
     struct Input {
         var deleteTask: PublishSubject<TasksData>
-        var deleteAll: PublishSubject<TasksData>
+        var deleteAll: PublishSubject<ViewModelExecution>
     }
     
     struct Output {

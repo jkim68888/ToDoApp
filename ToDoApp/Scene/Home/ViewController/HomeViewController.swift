@@ -67,9 +67,9 @@ class HomeViewController: UIViewController {
         output.sectionsSubject
             .withUnretained(self)
             .map{ (vc, sections) in
-                vc.tasksTableView.isHidden = sections.count == 0
-                vc.noTasksView.isHidden = sections.count != 0
-                vc.headerView.editBtn.isHidden = sections.count == 0
+                vc.tasksTableView.isHidden = sections.first?.items.count == 0
+                vc.noTasksView.isHidden = sections.first?.items.count != 0
+                vc.headerView.editBtn.isHidden = sections.first?.items.count == 0
                 
                 return sections
             }

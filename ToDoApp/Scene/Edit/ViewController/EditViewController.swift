@@ -69,6 +69,13 @@ class EditViewController: UIViewController {
         output.sectionsSubject
             .bind(to: editTableView.rx.items(dataSource: editDatasources))
             .disposed(by: disposeBag)
+        
+        deleteAllButton.rx.tap
+            .withUnretained(self)
+            .subscribe(onNext: { (vc, _) in
+                vc.input.deleteAll.onNext(.trigger)
+            })
+            .disposed(by: disposeBag)
     }
 }
 

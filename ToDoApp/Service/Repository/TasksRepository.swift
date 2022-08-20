@@ -12,7 +12,7 @@ import RxCocoa
 protocol TasksRepositoryProtocol {
     var tasks: [TasksData] { get }
     
-    var tasksSubject: PublishSubject<[TasksData]> { get }
+    var tasksSubject: ReplaySubject<[TasksData]> { get }
     
     func addTask(task: TasksData) -> Observable<[TasksData]>
     func updateTask(task: TasksData) -> Observable<[TasksData]>
@@ -21,7 +21,7 @@ protocol TasksRepositoryProtocol {
 }
 
 class TasksRepository: TasksRepositoryProtocol {
-    let tasksSubject = PublishSubject<[TasksData]>.init()
+    let tasksSubject = ReplaySubject<[TasksData]>.create(bufferSize: 1)
     
     // singletone
     // 여기서 한번만 생성시키고, 다른곳에서는 shared 로 호출하여 사용
@@ -44,8 +44,9 @@ class TasksRepository: TasksRepositoryProtocol {
             guard let updateTaskIndex = self.tasks.firstIndex(where: { $0.id == task.id }) else {
                 return Disposables.create()
             }
-            
+        
             self.tasks[updateTaskIndex].isComplete = task.isComplete
+            self.tasksSubject.onNext(self.tasks)
             observer.onNext(self.tasks)
             
             return Disposables.create()

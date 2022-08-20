@@ -60,8 +60,11 @@ class HeaderView: UIView {
         editBtn.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { (v, _) in
-                guard let vc = v.viewContainingController() as? HomeViewController else { return }
-                vc.navigationController?.pushViewController(EditViewController(), animated: true)
+                if let homeVc = v.viewContainingController() as? HomeViewController {
+                    homeVc.navigationController?.pushViewController(EditViewController(), animated: true)
+                } else if let editVc = v.viewContainingController() as? EditViewController {
+                    editVc.navigationController?.popViewController(animated: true)
+                }
             })
             .disposed(by: disposeBag)
     }

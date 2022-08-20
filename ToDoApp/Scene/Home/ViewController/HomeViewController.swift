@@ -67,6 +67,7 @@ class HomeViewController: UIViewController {
         input.initializeTasks.onNext(.trigger)
         
         output.sectionsSubject
+            .subscribe(on: MainScheduler.instance)
             .withUnretained(self)
             .map{ (vc, sections) in
                 vc.tasksTableView.isHidden = sections.first?.items.count == 0

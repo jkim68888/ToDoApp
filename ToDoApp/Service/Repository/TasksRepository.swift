@@ -37,6 +37,7 @@ class TasksRepository: TasksRepositoryProtocol {
     func getRealmTasks() -> Observable<[TasksData]> {
         return Observable<[TasksData]>.create{ observer -> Disposable in
             let realmSavedTasks = self.realm.objects(TasksData.self)
+            self.tasksSubject.onNext(realmSavedTasks.filter{ _ in true })
             observer.onNext(realmSavedTasks.filter{ _ in true })
             
             self.tasks = realmSavedTasks.filter{ _ in true }
@@ -63,12 +64,14 @@ class TasksRepository: TasksRepositoryProtocol {
     
     func updateTask(task: TasksData) -> Observable<[TasksData]> {
         return Observable<[TasksData]>.create { observer -> Disposable in
-            guard let updateTaskIndex = self.tasks.firstIndex(where: { $0.id == task.id }) else {
-                return Disposables.create()
+            let filteredTask =  self.realm.objects(TasksData.self)
+            
+            try! self.realm.write{
+                filteredTask.filter("id == '\(task.id)'").first?.isComplete = !task.isComplete
             }
-        
-            self.tasks[updateTaskIndex].isComplete = task.isComplete
+            
             self.tasksSubject.onNext(self.tasks)
+            
             observer.onNext(self.tasks)
             
             return Disposables.create()
@@ -81,6 +84,12 @@ class TasksRepository: TasksRepositoryProtocol {
             self.tasksSubject.onNext(self.tasks)
             observer.onNext(self.tasks)
             
+            let filteredTask = self.realm.objects(TasksData.self)
+            
+            try! self.realm.write{
+                self.realm.delete(filteredTask.filter("id == '\(task.id)'").first!)
+            }
+            
             return Disposables.create()
         }
     }
@@ -90,6 +99,10 @@ class TasksRepository: TasksRepositoryProtocol {
             self.tasks.removeAll()
             self.tasksSubject.onNext(self.tasks)
             observer.onNext(self.tasks)
+            
+            try! self.realm.write{
+                self.realm.deleteAll()
+            }
             
             return Disposables.create()
         }

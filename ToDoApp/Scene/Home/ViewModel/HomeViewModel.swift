@@ -58,9 +58,7 @@ class HomeViewModel: ViewModelType {
         input.updateTask
             .withUnretained(self)
             .flatMap { (vm, task) -> Observable<[TasksData]> in
-                var updatedTask = task
-                updatedTask.isComplete = !updatedTask.isComplete
-                return vm.tasksRepository.updateTask(task: updatedTask)
+                return vm.tasksRepository.updateTask(task: task)
             }
             .map { tasks -> [TasksSection] in
                 var section = TasksSection.init(header: "first Section",

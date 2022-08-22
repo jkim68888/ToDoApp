@@ -31,6 +31,7 @@ class EditTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         bag = DisposeBag()
+        self.taskLabel.attributedText = self.taskLabel.text?.removeStrikeThrough()
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

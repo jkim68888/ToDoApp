@@ -22,7 +22,7 @@ class AddViewModel: ViewModelType {
                 if data.task == "" {
                     validationError.onNext("할일을 입력해주세요!")
                     return Observable.empty()
-                } else if data.priority == .none {
+                } else if data.priority?.rawValue == TasksPriority.none.rawValue {
                     validationError.onNext("중요도를 선택해주세요!")
                     return Observable.empty()
                 }

@@ -34,16 +34,16 @@
 
 - 할 일 작성 후 리스트에 `추가` [👀 더보기](#-할-일-추가)
 - `완료`된 할 일은 `취소선과 체크아이콘`으로 표시 [👀 더보기](#-할-일-완료-체크-기능)
-- `편집화면`에서 목록 `개별 삭제` 또는 `전체 삭제` 가능 [👀 더보기](#📍-할-일-삭제-기능)
+- `편집화면`에서 목록 `개별 삭제` 또는 `전체 삭제` 가능 [👀 더보기](#-할-일-삭제-기능)
 - 할 일 작성시 `중요도` 선택 가능
 - 중요도에 따라 색깔을 다르게 표시 (`중요도 : 높음 - 빨강, 보통 - 노랑, 낮음 - 초록`)
-- `앱을 끄고 난 후 다시 켜도` 이전 할 일 리스트가 보이도록 데이터를 `데이터베이스에 저장` [👀 더보기](#📍-데이터-저장---realm)
+- `앱을 끄고 난 후 다시 켜도` 이전 할 일 리스트가 보이도록 데이터를 `데이터베이스에 저장` [👀 더보기](#-데이터-저장---realm)
 
-<!-- ## 📍 MVVM 패턴
+## 📍 MVVM 패턴
 
-> Model - View - ViewModel
+> Model - View - ViewModel - ( Repository )
 
-![WeatherMate_MVVM](https://user-images.githubusercontent.com/75922558/183399149-7f6c6536-46a0-4eb3-bc39-28da337f7874.png) -->
+![TodoApp_MVVM](https://user-images.githubusercontent.com/75922558/185940578-201b22e7-8659-4a76-a064-da754dd45cd9.png)
 
 ## 📍 할 일 추가
 
@@ -53,9 +53,9 @@
 
 할 일을 추가 후 `저장 버튼` 클릭 시 `Realm` DB에 저장되게 한다. 이때, 데이터가 비어있으면 데이터가 저장 되지 않고 에러 메시지를 뷰에 토스트로 띄운다. 제대로 데이터가 저장되면 `add뷰가 dismiss 되고, 홈뷰에 데이터셀이 그려진다.` 홈뷰에서는 데이터가 없으면 초기 이미지가 그려지고, 데이터가 있으면 데이터 테이블 셀들이 그려진다.
 
-### 구현 방법
+### 데이터 흐름
 
-데이터 옵저버블 생성후, addTask 함수에서 map을 통해 validation 체크 후 옵저버블의 데이터를 realm에 저장하여 리턴한다.
+뷰컨트롤러에서 입력받은 데이터를 뷰모델을 통해 레포지토리까지 전송한 후, 레포지토리에서 데이터를 Realm에 저장시킨다.
 
 <details>
 <summary>코드 보기</summary>
@@ -126,6 +126,19 @@ output.validationError
 
 ![check](https://user-images.githubusercontent.com/75922558/185876934-f1c71791-d2a8-4e6e-8fed-ef3c30ecea2c.gif)
 
+### 구현 요소
+
+체크박스를 클릭할때마다 `Realm의 데이터`를 `바꿔`준다. 이때 데이터는 `Bool 타입`이며, 데이터값이 true일때 체크박스가 `체크`되고 리스트에 `취소선`이 그어진다.
+
+### 데이터 흐름
+
+1. Cell - 체크박스 클릭
+2. View Model - Repository의 데이터를 update하는 부분에 접근
+3. Repository - Realm의 데이터를 업데이트
+4. View Model - Realm에서 업데이트 된 데이터로 테이블 섹션을 재구성
+5. View Controller - 뷰모델에서 재구성된 섹션을 셀에 바인딩
+6. Cell - UI 변경
+
 ## 📍 할 일 삭제 기능
 
 개별 삭제와 전체 삭제
@@ -133,6 +146,25 @@ output.validationError
 ![delete](https://user-images.githubusercontent.com/75922558/185876946-8f9c9ce5-52e1-49f8-8c64-0c88873189bd.gif)
 ![deleteAll](https://user-images.githubusercontent.com/75922558/185876953-3f7c5c0e-9c3d-4069-98bd-a612550969ce.gif)
 
+### 구현 요소
+
+`편집 화면`에서 삭제 버튼 클릭시 해당 `리스트가 삭제`되고, 전체삭제 버튼 클릭시 모든 리스트가 삭제된다. 삭제 후 `완료 버튼`을 누르면, 삭제 되고 `남은 리스트`가 `홈화면`에 보여진다.
+
+### 데이터 흐름
+
+1. Cell - 삭제버튼 클릭
+2. View Model - Repository의 데이터를 delete하는 부분에 접근
+3. Repository - Realm의 데이터를 삭제
+4. View Model - Realm에서 삭제된 데이터를 제외한 데이터로 테이블 섹션을 재구성
+5. View Controller - 뷰모델에서 재구성된 섹션을 셀에 바인딩
+6. Cell - UI 변경
+
 ## 📍 데이터 저장 - Realm
 
 ![Simulator Screen Recording - iPhone 11 - 2022-08-22 at 17 00 26](https://user-images.githubusercontent.com/75922558/185870954-dc916169-aa35-4002-ad8a-7fcc80c6eeca.gif)
+
+### 구현 요소
+
+앱을 껐다 켜도 이전의 데이터가 남아있을 수 있도록 데이터를 데이터베이스에 저장한다. <br/>
+데이터베이스는 Realm을 사용하였다. <br/>
+Repository에서만 Realm에 접근하도록 구조를 짰다.
